@@ -519,8 +519,8 @@
     --chat--message--bot--background:rgba(255,255,255,.92);
     --chat--message--bot--color:#131f34;
     --chat--message--bot--border:1px solid rgba(20,103,196,.1);
-    --chat--message--user--background:linear-gradient(135deg,#1467c4 0%,#0d4f9e 60%,#12b6b0 120%);
-    --chat--message--user--color:#ffffff;
+    --chat--message--user--background:#eef5fd;
+    --chat--message--user--color:#131f34;
     --chat--message--user--border:none;
     --chat--message--pre--background:#0c1628;
 
@@ -533,10 +533,9 @@
   }
 
   /* ─── Chat Window: Glassmorphic Container ─── */
-  #n8n-chat .chat-window-wrapper,
-  #n8n-chat [class*="chat-window"],
+  #n8n-chat [class*="chat-window"]:not([class*="wrapper"]),
   .n8n-chat-window,
-  .chat-window-wrapper{
+  #n8n-chat .chat-layout{
     border-radius:22px !important;
     background:rgba(255,255,255,.82) !important;
     backdrop-filter:blur(24px) saturate(180%) !important;
@@ -550,12 +549,26 @@
     overflow:hidden !important;
     transition:box-shadow .4s ease, transform .4s cubic-bezier(.34,1.56,.64,1) !important;
   }
-  #n8n-chat .chat-window-wrapper:hover,
-  .chat-window-wrapper:hover{
+  #n8n-chat [class*="chat-window"]:not([class*="wrapper"]):hover,
+  .n8n-chat-window:hover,
+  #n8n-chat .chat-layout:hover{
     box-shadow:
       0 36px 80px rgba(19,31,52,.26),
       0 10px 30px rgba(20,103,196,.14),
       inset 0 1px 0 rgba(255,255,255,.6) !important;
+  }
+
+  /* Reset wrapper to be safe */
+  .chat-window-wrapper {
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    pointer-events: none !important;
+  }
+  .chat-window-wrapper > * {
+    pointer-events: auto;
   }
 
   @keyframes chatWindowIn{
@@ -654,12 +667,19 @@
   /* ─── User Messages: Rich gradient with glow ─── */
   .chat-message-from-user .chat-message,
   #n8n-chat [class*="message-from-user"] [class*="message-body"]{
+    background: var(--chat--message--user--background) !important;
+    color: var(--chat--message--user--color) !important;
+    border: 1px solid rgba(20,103,196,.12) !important;
     border-radius:18px 4px 18px 18px !important;
     box-shadow:
-      0 6px 20px rgba(20,103,196,.2),
-      0 2px 8px rgba(18,182,176,.1) !important;
+      0 4px 14px rgba(20,103,196,.1),
+      0 2px 6px rgba(20,103,196,.05) !important;
     animation:msgUserIn .5s cubic-bezier(.22,1,.36,1) both !important;
     transition:box-shadow .25s ease, transform .25s ease !important;
+  }
+  .chat-message-from-user .chat-message *,
+  #n8n-chat [class*="message-from-user"] [class*="message-body"] * {
+    color: var(--chat--message--user--color) !important;
   }
   .chat-message-from-user .chat-message:hover,
   #n8n-chat [class*="message-from-user"] [class*="message-body"]:hover{
@@ -780,6 +800,7 @@
     border-radius:16px !important;
     border:1.5px solid rgba(20,103,196,.12) !important;
     background:rgba(255,255,255,.9) !important;
+    color:var(--ink) !important;
     font-family:'Hind Siliguri','Baloo Da 2',sans-serif !important;
     font-size:.94rem !important;
     transition:
