@@ -262,41 +262,109 @@
   }
   .carousel-dots .dot-item.active{background:#fff;transform:scale(1.2);}
 
-  /* ---------- Wheel graphic ---------- */
-  .wheel-wrap{
+  /* ---------- Orbit graphic (replaces old overlapping wheel labels) ---------- */
+  .orbit-wrap{
     position:relative;
     width:100%;
-    aspect-ratio:1/1;
     max-width:520px;
+    aspect-ratio:1/1;
     margin:0 auto;
     animation:floatWheel 6s ease-in-out infinite;
+    --r:190px;
   }
   @keyframes floatWheel{
     0%,100%{transform:translateY(0);}
     50%{transform:translateY(-10px);}
   }
-  .wheel-wrap svg{width:100%;height:100%;display:block;}
-  .wheel-ring{transition:filter .3s ease, transform .3s ease; transform-origin:200px 200px;}
-  .wheel-ring:hover{filter:brightness(1.08); transform:scale(1.015);}
-  .wedge-label{
-    font-family:'Hind Siliguri',sans-serif;
-    font-size:15.5px;
-    font-weight:600;
-    fill:#fff;
-  }
-  .center-badge{animation:spinSlow 22s linear infinite; transform-origin:200px 200px;}
-  @keyframes spinSlow{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
-  .center-badge > *{animation:counterSpin 22s linear infinite; transform-origin:200px 200px;}
-  @keyframes counterSpin{from{transform:rotate(0deg);} to{transform:rotate(-360deg);}}
-  .hands-photo{
+  .orbit-ring-bg{
     position:absolute;
-    left:50%;
-    bottom:-6%;
-    transform:translateX(-50%);
-    width:78%;
+    inset:12%;
+    border-radius:50%;
+    border:2px dashed rgba(20,103,196,.18);
+  }
+  .orbit-ring-bg::before{
+    content:'';
+    position:absolute;
+    inset:14%;
+    border-radius:50%;
+    background:radial-gradient(circle at 50% 40%, rgba(20,103,196,.06), transparent 70%);
+  }
+  .orbit-center{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:172px; height:172px;
+    border-radius:50%;
+    background:linear-gradient(150deg,#ffffff, #eef6ff 60%, #e7fbf7);
+    border:1px solid rgba(20,103,196,.12);
+    box-shadow:0 20px 40px rgba(19,31,52,.14), inset 0 1px 0 rgba(255,255,255,.9);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:14px;
+    z-index:4;
+  }
+  .orbit-center .leaf-badge{
+    width:46px;height:46px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--leaf-green),var(--hand-blue));
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:8px;
+    box-shadow:0 8px 16px rgba(31,122,58,.28);
+  }
+  .orbit-center .leaf-badge svg{width:24px;height:24px;}
+  .orbit-center strong{
+    font-family:'Baloo Da 2',sans-serif;
+    font-size:1rem;
+    color:var(--ink);
+    line-height:1.35;
+  }
+  .orbit-center span{
+    font-size:.78rem;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+
+  .orbit-item{
+    position:absolute;
+    top:50%; left:50%;
+    width:104px;
+    margin-left:-52px;
+    margin-top:-46px;
+    transform:rotate(var(--angle)) translate(var(--r)) rotate(calc(-1 * var(--angle)));
+    text-align:center;
     z-index:3;
-    pointer-events:none;
-    filter:drop-shadow(0 14px 18px rgba(19,31,52,.14));
+  }
+  .orbit-item .orbit-icon{
+    width:54px;height:54px;
+    margin:0 auto 8px;
+    border-radius:15px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.4rem;
+    color:#fff;
+    box-shadow:0 10px 20px rgba(19,31,52,.16);
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .orbit-item span{
+    display:block;
+    font-size:.82rem;
+    font-weight:600;
+    color:var(--ink);
+    line-height:1.3;
+  }
+  .orbit-item:hover .orbit-icon{transform:translateY(-4px) scale(1.06); box-shadow:0 14px 26px rgba(19,31,52,.22);}
+
+  @media (max-width: 980px){
+    .orbit-wrap{--r:140px; max-width:400px;}
+    .orbit-center{width:140px;height:140px;}
+    .orbit-item{width:92px; margin-left:-46px; margin-top:-40px;}
+    .orbit-item .orbit-icon{width:46px;height:46px;font-size:1.2rem;}
+    .orbit-item span{font-size:.74rem;}
+  }
+  @media (max-width: 480px){
+    .orbit-wrap{--r:112px; max-width:320px;}
   }
 
   /* ---------- Trust bar ---------- */
@@ -922,6 +990,35 @@
     border-bottom-color:var(--cta-blue) !important;
   }
 
+  /* ─── Maintenance fallback message (shown when the bot fails to respond) ─── */
+  .maintenance-message{
+    display:flex !important;
+    align-items:flex-start;
+    gap:10px;
+    background:linear-gradient(135deg,#fff7ec,#fef1e0) !important;
+    border:1px solid rgba(239,154,45,.28) !important;
+    border-radius:16px !important;
+    padding:.85rem 1.05rem !important;
+    box-shadow:0 4px 14px rgba(239,154,45,.1) !important;
+    animation:msgBotIn .45s cubic-bezier(.22,1,.36,1) both !important;
+  }
+  .maintenance-message .maint-icon{
+    font-size:1.15rem;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .maintenance-message .maint-text{
+    font-size:.92rem;
+    line-height:1.6;
+    color:#7a4c12;
+  }
+  .maintenance-message .maint-text b{
+    display:block;
+    color:#8a5311;
+    margin-bottom:2px;
+    font-family:'Baloo Da 2','Hind Siliguri',sans-serif;
+  }
+
   /* ─── Responsive: mobile polish ─── */
   @media (max-width: 480px){
     :root{
@@ -978,57 +1075,44 @@
     </div>
 
     <div class="hero-graphic reveal reveal-delay-2">
-      <div class="wheel-wrap">
-        <svg viewBox="0 0 400 400">
-          <g class="wheel-ring">
-            <g transform="translate(200,200)">
-              <path d="M0,0 L0,-140 A140,140 0 0,1 121.2,-70 Z" fill="var(--ring-orange)"/>
-              <path d="M0,0 L121.2,-70 A140,140 0 0,1 121.2,70 Z" fill="var(--ring-blue)"/>
-              <path d="M0,0 L121.2,70 A140,140 0 0,1 0,140 Z" fill="var(--ring-purple)"/>
-              <path d="M0,0 L0,140 A140,140 0 0,1 -121.2,70 Z" fill="var(--ring-pink)"/>
-              <path d="M0,0 L-121.2,70 A140,140 0 0,1 -121.2,-70 Z" fill="var(--ring-cyan)"/>
-              <path d="M0,0 L-121.2,-70 A140,140 0 0,1 0,-140 Z" fill="var(--ring-teal)"/>
-              <circle r="72" fill="#ffffff"/>
-            </g>
-          </g>
+      <div class="orbit-wrap">
+        <div class="orbit-ring-bg"></div>
 
-          <g class="center-badge">
-            <g transform="translate(200,200)">
-              <path d="M-6 -30c-14 8-20 22-13 38 5-11 12-18 21-21-5 9-5 18 0 27 7-14 6-30-8-44z" fill="var(--leaf-green)"/>
-              <path d="M-26 8c7 17 18 26 26 26s19-9 26-26c-9 7-18 9-26 9s-17-2-26-9z" fill="var(--hand-blue)"/>
-            </g>
-          </g>
+        <div class="orbit-center">
+          <div class="leaf-badge">
+            <svg viewBox="0 0 42 42" fill="none">
+              <path d="M21 6c-6 3-9 9-6 16 2-5 5-8 9-9-2 4-2 8 0 12 3-6 3-13-3-19z" fill="#fff"/>
+              <path d="M10 24c3 8 8 12 11 12s8-4 11-12c-4 3-8 4-11 4s-7-1-11-4z" fill="#fff" opacity=".85"/>
+            </svg>
+          </div>
+          <strong>সব বিনিয়োগ<br>এক জায়গায়</strong>
+          <span>Biniyog.com.bd</span>
+        </div>
 
-          <text x="290" y="118" text-anchor="middle" class="wedge-label">Tax Rebate</text>
-          <text x="330" y="205" text-anchor="middle" class="wedge-label">Insurance</text>
-          <text x="300" y="292" text-anchor="middle" class="wedge-label">Mutual</text>
-          <text x="300" y="310" text-anchor="middle" class="wedge-label">Fund</text>
-          <text x="115" y="310" text-anchor="middle" class="wedge-label">Stock</text>
-          <text x="80" y="205" text-anchor="middle" class="wedge-label">Bank</text>
-          <text x="80" y="221" text-anchor="middle" class="wedge-label">scheme</text>
-          <text x="112" y="118" text-anchor="middle" class="wedge-label">Sanchaya-</text>
-          <text x="112" y="134" text-anchor="middle" class="wedge-label">patra</text>
-
-          <g fill="#ffffff">
-            <rect x="278" y="70" width="24" height="18" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
-            <rect x="308" y="150" width="22" height="26" rx="3" fill="none" stroke="#fff" stroke-width="2"/>
-            <rect x="268" y="245" width="26" height="20" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
-            <rect x="95" y="245" width="26" height="20" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
-            <rect x="65" y="150" width="22" height="26" rx="3" fill="none" stroke="#fff" stroke-width="2"/>
-            <rect x="90" y="70" width="24" height="18" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
-          </g>
-        </svg>
-
-        <svg class="hands-photo" viewBox="0 0 300 190">
-          <path d="M20 150 C20 100 60 80 100 90 C120 60 180 60 200 90 C240 80 280 100 280 150 C280 175 240 185 150 185 C60 185 20 175 20 150 Z" fill="#f2c9a0"/>
-          <circle cx="120" cy="150" r="9" fill="#e0b25c"/>
-          <circle cx="140" cy="145" r="9" fill="#d1d1d1"/>
-          <circle cx="160" cy="152" r="9" fill="#e0b25c"/>
-          <circle cx="150" cy="132" r="9" fill="#d1d1d1"/>
-          <circle cx="132" cy="130" r="9" fill="#e0b25c"/>
-          <circle cx="170" cy="135" r="9" fill="#d1d1d1"/>
-          <path d="M148 90c-10 6-14 16-9 27 4-8 9-13 15-15-4 6-4 13 0 19 5-10 4-21-6-31z" fill="var(--leaf-green)"/>
-        </svg>
+        <div class="orbit-item" style="--angle:-90deg;">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,var(--ring-orange),#c97a15);">🧾</div>
+          <span>ট্যাক্স রিবেট</span>
+        </div>
+        <div class="orbit-item" style="--angle:-30deg;">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,var(--ring-blue),#2a4fa8);">🛡️</div>
+          <span>ইন্স্যুরেন্স</span>
+        </div>
+        <div class="orbit-item" style="--angle:30deg;">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,var(--ring-cyan),#1c7a94);">💹</div>
+          <span>মিউচুয়াল ফান্ড</span>
+        </div>
+        <div class="orbit-item" style="--angle:90deg;">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,var(--ring-purple),#7a34b8);">📈</div>
+          <span>স্টক</span>
+        </div>
+        <div class="orbit-item" style="--angle:150deg;">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,var(--ring-pink),#b83a6f);">🏦</div>
+          <span>ব্যাংক স্কিম</span>
+        </div>
+        <div class="orbit-item" style="--angle:210deg;">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,var(--ring-teal),#0d8f8a);">📜</div>
+          <span>সঞ্চয়পত্র</span>
+        </div>
       </div>
     </div>
 
@@ -1199,6 +1283,41 @@
       },
     },
   });
+
+  // ── Friendly "under maintenance" fallback whenever the bot fails to answer ──
+  (function watchForChatErrors(){
+    const errorPattern = /error|failed to receive response|something went wrong/i;
+    const maintenanceHTML =
+      '<span class="maint-icon">🛠️</span>' +
+      '<span class="maint-text"><b>সাময়িক রক্ষণাবেক্ষণ চলছে</b>' +
+      'দুঃখিত, আমাদের এআই সহায়ক এই মুহূর্তে সাড়া দিতে পারছে না। ' +
+      'অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।</span>';
+
+    const tryFix = (node) => {
+      if(!(node instanceof HTMLElement)) return;
+      if(node.classList && node.classList.contains('maintenance-message')) return;
+      const text = node.textContent || '';
+      if(text.length < 200 && errorPattern.test(text)){
+        const bubble = node.closest('[class*="chat-message"]') || node;
+        if(bubble && bubble.dataset && bubble.dataset.maintFixed) return;
+        bubble.classList.add('maintenance-message');
+        bubble.innerHTML = maintenanceHTML;
+        if(bubble.dataset) bubble.dataset.maintFixed = '1';
+      }
+    };
+
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((node) => {
+          if(node.nodeType === 1){
+            tryFix(node);
+            node.querySelectorAll && node.querySelectorAll('*').forEach(tryFix);
+          }
+        });
+      });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+  })();
 </script>
 
 </body>
