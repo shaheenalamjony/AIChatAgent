@@ -1245,14 +1245,14 @@
   // Decorative  dots for the hero carousel
   const dotsWrap = document.getElementById('dots');
   const totalDots = 12;
-  let active = 0;
+  let active = 0; 
   for(let i=0;i<totalDots;i++){
     const d = document.createElement('div');
     d.className = 'dot-item' + (i===0 ? ' active' : '');
     d.addEventListener('click', () => setActive(i));
     dotsWrap.appendChild(d);
   }
-  function setActive(i){
+  function setActive(i){ 
     active = (i + totalDots) % totalDots;
     [...dotsWrap.children].forEach((el, idx) => el.classList.toggle('active', idx === active));
   }
@@ -1264,7 +1264,7 @@
 <script type="module">
   import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-  createChat({
+  createChat({ 
     webhookUrl: 'https://imagines-scenic-press.ngrok-free.dev/webhook/b633049c-4d10-4b8c-91f1-c6fcc2d733c8/chat',
     mode: 'window',
     showWelcomeScreen: true,
